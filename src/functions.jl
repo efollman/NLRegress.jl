@@ -1,6 +1,6 @@
-function gradient(fun::Function, X::Vector{Float64}, h::Float64)
+function gradient(fun::Function, X::Vector, h::Float64)
 
-    g::Vector{Float64} = zeros(size(X));
+    g::Vector = zeros(size(X));
     
     for i=1:length(X)
 
@@ -13,8 +13,8 @@ function gradient(fun::Function, X::Vector{Float64}, h::Float64)
     return g
 end
 
-function gradient_descent(lossfun::Function, X₀::Vector{Float64}, γ::Float64, N::UInt64)
-    X::Vector{Float64} = X₀;
+function gradient_descent(lossfun::Function, X₀::Vector, γ::AbstractFloat, N::UInt)
+    X::Vector = X₀;
     h::Float64 = 1e-5;
     for i=1:N
         X = X - (γ .* gradient(lossfun,X,h)); #goofball shit neccesarry
@@ -22,15 +22,13 @@ function gradient_descent(lossfun::Function, X₀::Vector{Float64}, γ::Float64,
     return X
 end
 
-function makieNL(M::Matrix{Float64},f::Function,γ::Float64,iter::UInt64,b₀::Vector{Float64},anim::Bool)
+function makieNL(X::RealVector,Y::RealVector,f::Function,γ::Real,iter::Integer,b₀::RealVector,anim::Bool)
 
     #Reproccessing
-    X::Vector{Float64} = M[:,1];
-    Y::Vector{Float64} = M[:,2];
 
     
     #Loss Function
-    g(b::Vector{Float64}) = mean((Y .- f(X, b)) .^ 2);
+    g(b::RealVector) = mean((Y .- f(X, b)) .^ 2);
 
     #Innitial Guess empty?
     #Running Optimization Algorithim
@@ -60,7 +58,7 @@ function makieNL(M::Matrix{Float64},f::Function,γ::Float64,iter::UInt64,b₀::V
     roundDigits::Int64 = 3;
 
     F::Figure = Figure(size = (1000,600))
-    x::LinRange{Float64,Int64} = LinRange(minimum(X),maximum(X), 1000);
+    x::LinRange = LinRange(minimum(X),maximum(X), 1000);
     funcY::Observable{Vector{Float64}} = @lift(f(x, $b_gd ))
     
     ax1::Axis = Axis(F[1,1])
@@ -79,10 +77,10 @@ function makieNL(M::Matrix{Float64},f::Function,γ::Float64,iter::UInt64,b₀::V
     ax2::Axis = Axis(F[2,1];
         limits = (0,iter,nothing,nothing),
     )
-    x2::LinRange{Float64,Int64} = LinRange(1,iter,hist_length)
+    x2::LinRange = LinRange(1,iter,hist_length)
     lines!(x2,loss_hist; color = Cycled(3),label = "Mean Square\nError")
 
-    numB::UInt = length(b₀);
+    numB::Integer = length(b₀);
     
     bho1::Observable{Vector{Float64}} = @lift($b_hist[1,:])
     bho::Vector{Observable{Vector{Float64}}} = fill(bho1,size(b₀))

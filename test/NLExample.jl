@@ -29,6 +29,8 @@ function NLExample()
     #Run Code
     let
         M::Matrix{Float64} = Initial_Data;
+        X::Vector{Float64} = M[:,1];
+        Y::Vector{Float64} = M[:,2];
         f::Function = Function_Model;
         ptm::Bool = PlotTestMode;
         b₀::Vector{Float64} = Initial_Guess;
@@ -37,8 +39,6 @@ function NLExample()
         anim::Bool = Animate;
 
         if ptm == true
-            X::Vector{Float64} = M[:,1];
-            Y::Vector{Float64} = M[:,2];
             x::LinRange{Float64,Int64} = LinRange( minimum(X) , maximum(X) ,1000);
             scatter(X, Y);
             plot(x, f(x, b₀));
@@ -47,7 +47,7 @@ function NLExample()
             ylabel('y');
             legend(labels);
         else
-            (B::Vector{Float64},MSE::Float64,RS::Float64) = makieNL(M,f,γ,iter,b₀,anim);
+            (B::Vector{Float64},MSE::Float64,RS::Float64) = makieNL(X,Y,f,γ,iter,b₀,anim);
             println("B: "*string(B))
             println("MSE: "*string(MSE))
             println("R^2: "*string(RS));
