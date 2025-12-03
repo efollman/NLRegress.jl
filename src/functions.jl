@@ -22,11 +22,9 @@ function gradient_descent(lossfun::Function, X₀::Vector, γ::AbstractFloat, N:
     return X
 end
 
-function makieNL(M::Matrix,f::Function,γ::Real,iter::Integer,b₀::RealVector,anim::Bool)
+function makieNL(X::RealVector,Y::RealVector,f::Function,γ::Real,iter::Integer,b₀::RealVector,anim::Bool)
 
     #Reproccessing
-    X::Vector{Float64} = M[:,1];
-    Y::Vector{Float64} = M[:,2];
 
     
     #Loss Function
