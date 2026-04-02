@@ -1,6 +1,6 @@
 name = "NLRegress"
 uuid = "11173369-cad3-4224-8582-2c2a165727c0"
-version = "1.0.0"
+version = "0.1.0"
 authors = ["Evan Follman"]
 
 [deps]
